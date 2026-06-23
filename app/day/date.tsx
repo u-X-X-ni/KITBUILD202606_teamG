@@ -4,7 +4,11 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 const  DayScreen  =  ( )  => {
-  const { selected } = useLocalSearchParams();
+  const { selected } = useLocalSearchParams();  //送られてきたselectedを受け取る
+  const preDate = new Date(selected as string);
+  preDate.setDate(preDate.getDate() - 1);
+  const nextDate = new Date(selected as string);
+  nextDate.setDate(nextDate.getDate() + 1);
 
   return(
     <SafeAreaView style={{marginHorizontal: 12}}>
@@ -16,14 +20,18 @@ const  DayScreen  =  ( )  => {
       </View>
       {/*見出し*/}
       <View style={[styles.row, {justifyContent: 'space-between'}]}>
-        <Button  //移動の仕方わからないから後回し！！
+        <Button
           title='← 前の日'
+          //onPress={() => console.log ( date.toISOString().slice(0, 10) ) }  //日付を返す（sliceで初めの10文字みたいなやつ）（下の本来のonPressのparamsに書いているのもこれ）
+          //onPress={() => console.log ( preDate ) }
+          onPress={() => router.push({pathname:'/day/date', params:{selected: preDate.toISOString().slice(0, 10)}})}
         />
         <Text style={{fontSize: 25, marginBottom: 20, textAlign: 'center'}}>
           {selected}
         </Text>
         <Button
           title='次の日 →'
+          onPress={() => router.push({pathname:'/day/date', params:{selected: nextDate.toISOString().slice(0, 10)}})}
         />
       </View>
       <Text style={styles.title}>
@@ -51,6 +59,7 @@ const  DayScreen  =  ( )  => {
         />
         <Button
           title='＋日記を追加'
+          onPress={() => router.push({pathname:'/diary/new', params:{selected}})}
         />
       </View>
     </SafeAreaView>

@@ -3,6 +3,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+//import Storage from 'expo-sqlite/kv-store';  きさらがDB終わってから
 
 const  EditScreen  =  ( )  =>  { 
   const { selected } = useLocalSearchParams();
