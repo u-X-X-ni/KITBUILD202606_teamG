@@ -13,7 +13,7 @@ export const diariesTable = sqliteTable("diaries_table", {
 })
 
 
-export const todos = sqliteTable("todos_table", {
+export const todosTable = sqliteTable("todos_table", {
   id: integer().primaryKey({ autoIncrement: true }),
   text: text().notNull(),
   date: text(),
@@ -46,5 +46,4 @@ export const usersTable = sqliteTable("users_table", {
   age: int().notNull(),
   email: text().notNull().unique(),
 });
-
 

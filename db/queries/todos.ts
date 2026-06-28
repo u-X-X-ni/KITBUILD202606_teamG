@@ -2,6 +2,10 @@ import { desc, eq } from 'drizzle-orm';
 import { db } from '../client';
 import { todosTable } from '../schema';
 
+export type Todo =  typeof todosTable.$inferSelect
+
+export type NewTodo = Omit<typeof todosTable.$inferInsert, 'id' | 'createdAt' | 'updatedAt'>;
+
 export const listAll = () => {
     return db.select().from(todosTable).orderBy(desc(todosTable.createdAt));
 }

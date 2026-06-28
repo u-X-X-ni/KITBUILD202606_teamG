@@ -2,10 +2,14 @@ import { desc, eq, like } from 'drizzle-orm';
 import { db } from '../client';
 import { eventsTable, } from '../schema';
 
+export type Event =  typeof eventsTable.$inferSelect
+
+export type NewEvent = Omit<typeof eventsTable.$inferInsert, 'id' | 'createdAt' | 'updatedAt'>;
+
 export const listAll = () =>
     db.select().from(eventsTable).orderBy(desc(eventsTable.createdAt));
 
-export const datesInMonth = (ym: string) =>　{
+export const datesInMonth = (ym: string) => {
     const searchPattern = `${ym}-%`
     return  db.selectDistinct({
         date: eventsTable.date,
@@ -13,7 +17,7 @@ export const datesInMonth = (ym: string) =>　{
     .from(eventsTable).where(like(eventsTable.date, searchPattern));
 }
 
-export const create = (data: typeof eventsTable.$inferInsert) => {
+export const create = (data: NewEvent) => {
     const now = (new Date())
     return  db.insert(eventsTable).values({
      ...data,
@@ -22,7 +26,7 @@ export const create = (data: typeof eventsTable.$inferInsert) => {
     }).returning();
 }
 
-export const update = ( id: number, data: any) => {
+export const update = ( id: number, data: Partial<NewEvent>) => {
     const now = new Date();
     return db.update(eventsTable).set({
      ...data,
