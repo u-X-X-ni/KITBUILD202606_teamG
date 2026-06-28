@@ -23,7 +23,12 @@ const  App  =  ( )  =>  {
 
   return  ( 
     //<YStack marginTop={80} marginRight={7} marginLeft={7}>
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: '#fbf3e8',
+      }}
+    >
       <Text
         style={{
           fontSize: 25,
@@ -46,7 +51,7 @@ const  App  =  ( )  =>  {
         style = { { 
         /*borderWidth : 1 , 
         borderColor : 'gray' , */
-        backgroundColor : '#fff2e4',
+        backgroundColor : '#fbf3e8',
         height : 350, 
         } }
 
@@ -55,10 +60,10 @@ const  App  =  ( )  =>  {
           return (
             <View
               style={{
-                width: 45,
+                width: 50,
                 height: 60,
                 borderWidth: 1,
-                borderColor: '#ffdca7',
+                borderColor: '#f7d8ad',
                 justifyContent: 'flex-start',
                 alignItems: 'center',
                 paddingTop: 6,
