@@ -41,6 +41,7 @@ const  EditScreen  =  ( )  =>  {
 	        予定
         </Text>
 				<TextInput
+          multiline
       		style={styles.input}
 					placeholder='予定を入力…'
           onChangeText={setTitle}
