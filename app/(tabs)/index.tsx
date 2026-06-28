@@ -2,7 +2,7 @@
 
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 //import { YStack } from 'tamagui';
 
@@ -49,13 +49,13 @@ const  App  =  ( )  =>  {
         } } 
         // カレンダーの外観をカスタマイズ
         style = { { 
-        /*borderWidth : 1 , 
-        borderColor : 'gray' , */
-        backgroundColor : '#fbf3e8',
-        height : 350, 
+          /*borderWidth : 1 , 
+          borderColor : 'gray' , */
+          backgroundColor : '#fbf3e8',
+          height : 350, 
         } }
 
-        dayComponent={({ date, state }) => {
+        /*dayComponent={({ date, state }) => {
           //console.log(date);
           return (
             <View
@@ -80,7 +80,7 @@ const  App  =  ( )  =>  {
               </Text>
             </View>
           );
-        }}
+        }}*/
       /> 
     </SafeAreaView>
     //</YStack>
