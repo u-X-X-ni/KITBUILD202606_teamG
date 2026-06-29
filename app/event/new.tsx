@@ -1,15 +1,23 @@
 //予定入力画面
 
+import { useEvents } from '@/hooks/use-events';
 import { router, useLocalSearchParams } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
-//import Storage from 'expo-sqlite/kv-store';  きさらがDB終わってから
 
 const  EditScreen  =  ( )  =>  { 
-  const { selected } = useLocalSearchParams();
+  const { selected,id } = useLocalSearchParams();
   const [ title, setTitle] = useState('');
-	const [ startTime, setStartTime] = useState('');
-	const [ endTime, setEndTime] = useState('');
+	//const [ startTime, setStartTime] = useState('');
+	//const [ endTime, setEndTime] = useState('');
+  const { events, add, update, remove } = useEvents();
+  const selectedEvent = events.find(event => event.id === Number(id));
+
+  useEffect(() => {
+    if(selectedEvent){
+      setTitle(selectedEvent.title)
+    }
+  }, [selectedEvent]);
 
   return(
     <SafeAreaView style={{marginHorizontal: 12}}>
@@ -21,13 +29,30 @@ const  EditScreen  =  ( )  =>  {
         />
 				<Button  //保存できるような処理を書かないといけないはず！！
           title="保存" 
-          onPress={() => router.push({pathname:'/day/date', params:{selected}})}
+          onPress={async() => {
+            if (id) {
+              await update(Number(id), {
+                title,
+                date: selected as string,
+                //start_time: startTime,
+                //end_time: endTime,
+              });
+            }else{
+              await add({
+                title: title,
+                date: selected as string,
+                //start_time: startTime,
+                //end_time: endTime,
+              });
+            }
+            router.push({pathname:'/day/date', params:{selected}})
+          }}
 					//onPress={() => console.log(selected, title, startTime, endTime)}
         />
 			</View>
 			{/*見出し*/}
         <Text style={{fontSize: 25, marginBottom: 20}}>
-	        予定を追加
+	        { id ? "予定を編集" : "予定を追加" }
         </Text>
 			{/*テキスト（日付の表示）*/}
         <Text style={styles.title}>
@@ -47,7 +72,20 @@ const  EditScreen  =  ( )  =>  {
           onChangeText={setTitle}
           value={title}
         />
-			{/*時間*/}
+      {/*編集の時は削除ボタンを出す*/}
+        {id ? (
+          <View style={[styles.row, {justifyContent: 'space-between'}]}>
+            <Button
+              title="予定を削除" 
+              onPress={async() => {
+                await remove(Number(id));
+                router.push({pathname:'/day/date', params:{selected}});
+              }}
+            />
+          </View>
+        ) : null}
+
+			{/*時間
         <Text style={styles.title}>
 	        時間
         </Text>
@@ -76,7 +114,7 @@ const  EditScreen  =  ( )  =>  {
           onChangeText={setEndTime}
           value={endTime}
         />
-			</View>
+			</View>*/}
     </SafeAreaView>
   );
 };
