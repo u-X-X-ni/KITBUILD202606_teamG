@@ -35,5 +35,5 @@ export const update = ( id: number, data: Partial<NewEvent>) => {
 }
 
 export const remove = (id: number) => {
-    db.delete(eventsTable).where(eq(eventsTable.id, id))
+    return db.delete(eventsTable).where(eq(eventsTable.id, id))
 }

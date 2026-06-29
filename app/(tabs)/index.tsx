@@ -1,7 +1,8 @@
 //カレンダー画面（トップ画面）
 
+import { useEvents } from '@/hooks/use-events';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SafeAreaView, Text } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 //import { YStack } from 'tamagui';
@@ -12,7 +13,33 @@ const  App  =  ( )  =>  {
   const now = new Date();
   const japanTime = now.getTime() + (9 * 60 * 60 * 1000); // UTC+9の調整
   const today = new Date(japanTime);
-  const currentDate = today.toISOString().slice(0, 10); // YYYY-MM-DD形式
+  const currentDate = today.toISOString().slice(0, 7); // YYYY-MM-DD形式
+  const { getDatesInMonth } = useEvents();  //ドットをつける時のやつ
+  const [ month, setMonth ] = useState(currentDate);  //
+  const [eventDates, setEventDates] = useState(new Set<string>());
+
+  useEffect(() => {
+    const load = async () => {
+      const set =  await getDatesInMonth(month);
+      setEventDates(set);
+    }
+    load();
+  }, [month]);
+
+  const marked: any = {};
+
+  eventDates.forEach(date => {
+    marked[date] = { marked: true };
+  });
+
+  if (selected) {
+    marked[selected] = {
+      ...marked[selected],
+      selected: true,
+      disableTouchEvent: true,
+    };
+  }
+
   // 日付フォーマット関数
   /*const formatDate = (date: Date) => {
       const year = date.getFullYear();
@@ -35,7 +62,13 @@ const  App  =  ( )  =>  {
           textAlign: 'center',
         }}
       >まいらいふ</Text>
+
       < Calendar 
+        onMonthChange={ month => {
+          setMonth(month.dateString.slice(0, 7));
+          //console.log(month);
+        }}
+
         //ユーザーが押した日付
         onDayPress = { day  =>  { 
           setSelected ( day.dateString ) ; 
@@ -43,10 +76,11 @@ const  App  =  ( )  =>  {
           router.push({pathname:'/day/date', params:{selected: day.dateString}});
           //console.log ( 'selected day', day ) ;
         } } 
-        // 選んだ日付をマーク
+        /* 選んだ日付をマーク
         markedDates = { { 
-          [ selected ] : { selected : true ,  disableTouchEvent : true  } 
-        } } 
+          [ selected ] : { selected : true ,  disableTouchEvent : true, marked  } 
+        } } */
+        markedDates={marked}
         // カレンダーの外観をカスタマイズ
         style = { { 
           /*borderWidth : 1 , 
